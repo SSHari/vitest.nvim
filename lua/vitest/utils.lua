@@ -7,6 +7,14 @@ local combine_string_array = function(arr)
 end
 
 M.parse_output = function(data)
+    local loop_counter = 0
+
+    -- Remove any output that isn't part of the json
+    while data[1] ~= "{" and loop_counter < 100 do
+        table.remove(data, 1)
+        loop_counter = loop_counter + 1
+    end
+
     local json_string = combine_string_array(data)
     local success, json = pcall(vim.json.decode, json_string)
     if success then return json end
